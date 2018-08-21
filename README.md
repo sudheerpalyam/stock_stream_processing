@@ -30,8 +30,7 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 Architectural Patterns:
 
 Batch Mode - Spark Window Aggregations
-![alt text](https://github.com/sudheerpalyam/stock_stream_processing/static/SparkBatchPipeline.jpeg)
-
+![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
 Spark 2.3/2.4.0-SNAPSHOT repository
