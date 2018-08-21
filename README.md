@@ -1,11 +1,15 @@
 ### 
 Proposed Data Engineering Framework for ThroughWorks, as part for a technical assessment.
 
-Currently focusing on performing Moving Averages on Streaming Market Stock data, but this framework is generally applicable for any Data Engineering, Machine Learning Engineering tasks.
+Currently focusing on performing Moving Averages on Streaming Market Stock data, but this framework is generally extendable for any Data Engineering, Machine Learning Engineering tasks.
 
 @author: Sudheer Palyam
 
 
+### Problem Statement
+    Design and implement a Scalable, Distributed, Complete solution accepting input data feed and perform ***moving averages*** which helps identifying trends in Stock Market.
+
+#### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0
 
 ### Analysis of Structured Streaming Sliding Window based aggregates:
 
@@ -13,11 +17,23 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 
 
 As we see the output above, Kafka is fed with one message per second.
-Spark streaming is set to 3 seconds windows, sliding every second.
+Spark streaming is set to **3 seconds windows**, **sliding every second**.
 So there will be three messages in each window.
 Since we are grouping by StockName, in this case AGL. There were two AGL stocks in one sliding window and its aggregates like max, min and avg are computed.
 So we can observe how Spark Structured Streaming retains messages from previous windows.
 Watermarking is used to limit the state maintenance, as more state to maintain mean more resources utilised.
+
+Comparing this with moving averages formula provide:
+     y(n-k+1) = (x(n-k+1) + x(n-k+2 ---- + x*k) * (1 / K)
+        Where n : Window number
+              k : number of items in each window
+              x : item values
+
+From our sample output:
+     y = ( 436.84 + 698.17) * (1 / 2)
+     i.e., y = 567.505   <== Moving Window Average value
+
+
 
 
 
@@ -68,7 +84,7 @@ Watermarking is used to limit the state maintenance, as more state to maintain m
 
 
 
-##### Quick steps to setup kafka and run locally:
+#### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
 
   start zookeeper:
@@ -94,7 +110,7 @@ Watermarking is used to limit the state maintenance, as more state to maintain m
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
 
 
-  #### Next Steps:
+#### Next Steps:
   1) Integrate a visualization layer based on Kibana & InfluxDB to continuously stream raw vs moving averages
   2) Run Kafka & Spark in Yarn/Mesos/DCOS Clustered Mode
   3) Implement the same pipeline using AWS native Serverless components replacing:
@@ -111,7 +127,7 @@ Watermarking is used to limit the state maintenance, as more state to maintain m
 
 
   #### References:
-  https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23/MEETUP_NOTES.md - My implementation is inspired by this
+  https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23
   https://github.com/pablo-tech/SparkService--Statistician
   https://aws.amazon.com/big-data/datalakes-and-analytics/
   https://docs.aws.amazon.com/streams/latest/dev/learning-kinesis-module-one.html
