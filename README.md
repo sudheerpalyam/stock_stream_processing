@@ -56,7 +56,7 @@ From our sample output:
 ### Architectural Patterns:
 
 
-#### File Streaming Mode - Spark Window Aggregations
+#### File Streaming Mode - Spark Window Aggregations (Proposed)
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
@@ -65,35 +65,34 @@ From our sample output:
 - Spark Structured Streaming
   - [File Stream](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/HelloStructredStreaming.scala#L23)
     - [schema](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L46)
-  - [Kafka Source](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L58-L64)
-  - [Kafka Sink](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L96-L109)
-  - [EventTime](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L79)
-  - [ProcessingTime](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L80)
-  - [Watermarks](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L77)
-  - [Checkpointing](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L104)
-  - [Sliding Window](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L78)
-  - [Tumbling Window](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L79)
+  - [Kafka Source](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L42-L50)
+  - [Kafka Sink](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L83-L93)
+  - [EventTime](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L63)
+  - [ProcessingTime](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L65)
+  - [Watermarks](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L62)
+  - [Checkpointing](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L91)
+  - [Sliding Window](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L63)
+  - [Tumbling Window](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L64)
   - Aggregations/Operations
-     - [avg](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L81)
+     - [avg](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L66)
      - [count](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/SocketSourceStreaming.scala#L37)
      - [max](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L45)
      - [flatMap](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/HelloStructredStreaming.scala#L28)
-     - [alias](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L81)
-     - [filter](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L82)
-     - [groupby](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L79)
-     - [where](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L56)
+     - [alias](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L81)
+     - [filter](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L82)
+     - [groupby](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L79)
      - [withColumnRenamed](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L55)
      - [repartition](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L65)
      - [partitionBy](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L70)
   - SQL
-    - [selectExpr](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L67)
-    - [CAST](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L67)
+    - [selectExpr](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L54)
+    - [CAST](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L54)
     - [where](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L64)
   - Output Modes
-    - [complete](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L106)
-    - [append](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L107)
-    - [update](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L108)
-  - [Multiple Stream Queries](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L111)
+    - [complete](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L79)
+    - [append](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L80)
+    - [update](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala#L81)
+  - [Multiple Stream Queries](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaStructuredStreaming.scala)
   - [Kafka Producer](src/main/scala/au/com/thoughtworks/assessment/spark/util/RandomStocksKafkaProducer.scala)
 
 
