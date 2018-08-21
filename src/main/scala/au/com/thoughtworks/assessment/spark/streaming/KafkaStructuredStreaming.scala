@@ -43,6 +43,7 @@ object KafkaStructuredStreaming {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
+//      .option("group.id", "myStockConsumerGroup")  // Mechanism to run spark tasks as kafka consumer group, to achieve parallel. Controlled by Kafka Topic partitions
       .option("subscribe", "newstocks")
       .option("startingOffsets", "latest") // Spark reads only latest Kafka messages, comment this to read from beginning
       //.schema(schema)  : we cannot set a schema for kafka source. Kafka source has a fixed schema of (key, value)
@@ -54,24 +55,22 @@ object KafkaStructuredStreaming {
       .map(r ⇒ StockEvent(r.getString(0)))
 
     //aggregation without window
-    /*val aggregates = stocks
-      .groupBy("stockName")
-      .avg("price")*/
+    /* val aggregates = stocks.groupBy("stockName").avg("price") */
 
     //windowing
     val aggregates = stocks
       .withWatermark("timestamp", "5 seconds") // Ignore data if they are late by more than 5 seconds
       .groupBy(window($"timestamp","3 seconds","1 seconds"), $"stockName")  //sliding window of size 4 seconds, that slides every 1 second
-//      .groupBy(window($"timestamp","6 seconds","2 seconds"))  //sliding window of size 4 seconds, that slides every 1 second
-//      .groupBy(window($"timestamp","6 seconds"), $"stockName") //tumbling window of size 4 seconds (event time)
-      //.groupBy(window(current_timestamp(),"4 seconds"), $"stockName") //Use processing time.
+      // .groupBy(window($"timestamp","6 seconds"), $"stockName") //tumbling window of size 4 seconds (event time)
+      // .groupBy(window(current_timestamp(),"4 seconds"), $"stockName") // if we want to use processing time, instead of event_time
       .agg(avg("price").alias("price"), min("price").alias("minPrice"), max("price").alias("maxPrice"), count("price").alias("count"))
       .select("window.start", "window.end", "stockName", "price", "minPrice", "maxPrice", "count")
 
+    // Get the resultant Dataframe Schema
    aggregates.printSchema()
 
 
-
+    // Print the window processing output in Console. Tricky to see when run in Yarn Cluster Mode
     val writeToConsole = aggregates
       .writeStream
       .format("console")
@@ -80,6 +79,7 @@ object KafkaStructuredStreaming {
       .outputMode("append") // only supported when we set watermark. output only new
       .start()
 
+    // Publish moving averages into another Kafka topic, so that it can be written to Data lake, render UI etc.
     val writeToKafka = aggregates
       .selectExpr("CAST(stockName AS STRING) AS key", "to_json(struct(*)) AS value")
       .writeStream

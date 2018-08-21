@@ -9,7 +9,7 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 ### Problem Statement
     Design and implement a Scalable, Distributed, Complete solution accepting input data feed and perform ***moving averages*** which helps identifying trends in Stock Market.
 
-#### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0
+#### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
 
 ### Analysis of Structured Streaming Sliding Window based aggregates:
 
@@ -23,7 +23,8 @@ Since we are grouping by StockName, in this case AGL. There were two AGL stocks 
 So we can observe how Spark Structured Streaming retains messages from previous windows.
 Watermarking is used to limit the state maintenance, as more state to maintain mean more resources utilised.
 
-Comparing this with moving averages formula provide:
+```
+Moving averages formula provided:
      y(n-k+1) = (x(n-k+1) + x(n-k+2 ---- + x*k) * (1 / K)
         Where n : Window number
               k : number of items in each window
@@ -32,7 +33,22 @@ Comparing this with moving averages formula provide:
 From our sample output:
      y = ( 436.84 + 698.17) * (1 / 2)
      i.e., y = 567.505   <== Moving Window Average value
+```
 
+
+### Scalability considerations:
+    KAFKA:
+        1. Partitions with in Topics drives the parallelism of consumers. So increase the number of partitions so that a Spark Consumer Group can process these messages in parallel.
+        2. Based on throughput requirements one can pick a rough number of partitions.
+            Lets call the throughput from producer to a single partition is P
+            Throughput from a single partition to a consumer is C
+            Target throughput is T
+            Required partitions = Max (T/P, T/C)
+     SPARK:
+        1. Run in Yarn-Client or Yarn-Cluster mode with kafka consumer group set. Set the Number of Kafka Partitions according to number of Spark Executor tasks feasible on the cluster.
+        2. Appropriate Spark Streaming Watermark configuration.
+     AWS:
+        1. Porting this pipeline to AWS Kinesis Firehose & Analytics will take care of scaling shards automatically and these are also managed serverless services.
 
 
 
@@ -86,7 +102,7 @@ From our sample output:
 
 #### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
-
+  ```
   start zookeeper:
   $<kafka-dir>/bin/zookeeper-server-start.sh config/zookeeper.properties
 
@@ -94,8 +110,8 @@ From our sample output:
   $<kafka-dir>/bin/kafka-server-start.sh config/server.properties
 
   create kafka topics:
-  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
-  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
+  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 4 --zookeeper localhost:2181
+  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 4 --zookeeper localhost:2181
 
   List Topics:
   $<kafka-dir>/bin/kafka-topics.sh  --list --zookeeper localhost:2181
@@ -108,7 +124,7 @@ From our sample output:
   describe:
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
-
+```
 
 #### Next Steps:
   1) Integrate a visualization layer based on Kibana & InfluxDB to continuously stream raw vs moving averages
