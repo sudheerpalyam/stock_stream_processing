@@ -35,6 +35,10 @@ From our sample output:
      i.e., y = 567.505   <== Moving Window Average value
 ```
 
+### Data:
+    [Synthetic Stock Events generated: ](data/sample_input.txt)
+    [Final Moving Averages Output: ](data/sample_output.txt)
+
 
 ### Scalability considerations:
     KAFKA:
