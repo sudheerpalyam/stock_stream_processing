@@ -26,6 +26,14 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
   * bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks 
   * bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
 
+
+Architectural Patterns:
+
+Batch Mode - Spark Window Aggregations
+![alt text](https://github.com/sudheerpalyam/stock_stream_processing/static/SparkBatchPipeline.jpeg)
+
+
+
 Spark 2.3/2.4.0-SNAPSHOT repository
 
 - Spark Structured Streaming
