@@ -7,7 +7,7 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 
 
 
-## Analysis of Structured Streaming Sliding Window based aggregates:
+### Analysis of Structured Streaming Sliding Window based aggregates:
 
 ![Alt text](static/OutputAnalysis.png?raw=true "Streaming output")
 
@@ -19,17 +19,20 @@ Since we are grouping by StockName, in this case AGL. There were two AGL stocks 
 So we can observe how Spark Structured Streaming retains messages from previous windows.
 Watermarking is used to limit the state maintenance, as more state to maintain mean more resources utilised.
 
-## H1 Architectural Patterns:
 
-### H2 File Streaming Mode - Spark Window Aggregations
+
+### Architectural Patterns:
+
+
+#### File Streaming Mode - Spark Window Aggregations
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
-Spark 2.3/2.4.0-SNAPSHOT repository
+#### Feature bookmarks:
 
 - Spark Structured Streaming
   - [File Stream](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/HelloStructredStreaming.scala#L23)
-    - [schema](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L30)
+    - [schema](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L46)
   - [Kafka Source](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L58-L64)
   - [Kafka Sink](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L96-L109)
   - [EventTime](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L79)
@@ -47,13 +50,13 @@ Spark 2.3/2.4.0-SNAPSHOT repository
      - [filter](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L82)
      - [groupby](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L79)
      - [where](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L56)
-     - [withColumnRenamed](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L48)
-     - [repartition](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L57)
-     - [partitionBy](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L62)
+     - [withColumnRenamed](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L55)
+     - [repartition](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L65)
+     - [partitionBy](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L70)
   - SQL
     - [selectExpr](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L67)
     - [CAST](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L67)
-    - [where](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/StreamingAggregations.scala#L56)
+    - [where](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/FileStreamingAggregations.scala#L64)
   - Output Modes
     - [complete](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L106)
     - [append](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L107)
@@ -65,7 +68,7 @@ Spark 2.3/2.4.0-SNAPSHOT repository
 
 
 
-  Quick steps to setup kafka and run locally:
+##### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
 
   start zookeeper:
@@ -91,7 +94,29 @@ Spark 2.3/2.4.0-SNAPSHOT repository
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
 
 
-  ## Next Steps:
+  #### Next Steps:
+  1) Integrate a visualization layer based on Kibana & InfluxDB to continuously stream raw vs moving averages
+  2) Run Kafka & Spark in Yarn/Mesos/DCOS Clustered Mode
+  3) Implement the same pipeline using AWS native Serverless components replacing:
+        Kafka -> AWS Kinesis Streams
+        Spark -> AWS Kinesis Analytics (As there is no serverless equivalent of Spark yet in AWS)
+        Spark Console/Kafka Writer -> AWS Kinesis FireHose
+        Kibana -> AWS QuickSight
+        Scala Kafka Producer -> Kinesis Data Generator
+  4) Dockerize all the workflow components and run it in Container managers like Kubernetes or AWS Elastic Kubernetes Service
+  5) Enhance Unit Tests and perform Code Coverage and eventually DevOps
+  6) SonarQube/Fortify code vulnerability assessment
 
-  1) Dockerize the whole workflow components and run it in Container managers like Kubernetes or AWS Elastic Kubernetics Service
-  2)
+
+
+
+  #### References:
+  https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23/MEETUP_NOTES.md - My implementation is inspired by this
+  https://github.com/pablo-tech/SparkService--Statistician
+  https://aws.amazon.com/big-data/datalakes-and-analytics/
+  https://docs.aws.amazon.com/streams/latest/dev/learning-kinesis-module-one.html
+  https://vishnuviswanath.com/spark_structured_streaming.html -- Good blog on Structured Streaming
+  https://databricks.com/blog/2017/05/08/event-time-aggregation-watermarking-apache-sparks-structured-streaming.html - Structured Streaming Window aggregations
+  https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/StreamingCounts.scala - Spark Streaming write to DynamoDB
+  https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/kinesis/KinesisUtils.scala - Kinesis Utils
+  https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/storage/DynamoUtils.scala - Dynamo Utils
