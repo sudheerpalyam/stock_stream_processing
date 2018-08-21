@@ -14,7 +14,7 @@ import org.apache.spark.sql.functions._
   * Ingests messages from Kafka topics, unions messages from different topics, Cast messages to Stock objects, Performs Window based aggregations and write to Console/another Kafka topic.
   *
   */
-object KafkaSourceStreaming {
+object KafkaStructuredStreaming {
 
 
   //convert aggregates into typed data
@@ -43,10 +43,12 @@ object KafkaSourceStreaming {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
-      .option("subscribe", "stocks")
+      .option("subscribe", "newstocks")
+      .option("startingOffsets", "latest") // Spark reads only latest Kafka messages, comment this to read from beginning
       //.schema(schema)  : we cannot set a schema for kafka source. Kafka source has a fixed schema of (key, value)
       .load()
 
+    // Map the source messages to Stock object
     val stocks: Dataset[StockEvent] = df
       .selectExpr("CAST(value AS STRING)")
       .map(r ⇒ StockEvent(r.getString(0)))

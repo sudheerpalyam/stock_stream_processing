@@ -7,9 +7,21 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 
 
 
-# H1 Architectural Patterns:
+## Analysis of Structured Streaming Sliding Window based aggregates:
 
-# H2 File Streaming Mode - Spark Window Aggregations
+![Alt text](static/OutputAnalysis.png?raw=true "Streaming output")
+
+
+As we see the output above, Kafka is fed with one message per second.
+Spark streaming is set to 3 seconds windows, sliding every second.
+So there will be three messages in each window.
+Since we are grouping by StockName, in this case AGL. There were two AGL stocks in one sliding window and its aggregates like max, min and avg are computed.
+So we can observe how Spark Structured Streaming retains messages from previous windows.
+Watermarking is used to limit the state maintenance, as more state to maintain mean more resources utilised.
+
+## H1 Architectural Patterns:
+
+### H2 File Streaming Mode - Spark Window Aggregations
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
@@ -53,28 +65,33 @@ Spark 2.3/2.4.0-SNAPSHOT repository
 
 
 
-  * Quick steps to setup kafka and run locally:
-  * Download from https://kafka.apache.org/downloads
-  *
-  * start zookeeper:
-  * $<kafka-dir>/bin/zookeeper-server-start.sh config/zookeeper.properties
-  *
-  * start kafka broker(s):
-  * $<kafka-dir>/bin/kafka-server-start.sh config/server.properties
-  *
-  * create kafka topics:
-  * $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
-  * $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
-  *
-  * $<kafka-dir>/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic stocks
-  * $<kafka-dir>/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic stocks
-  *
-  * describe:
-  * $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks
-  * $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
+  Quick steps to setup kafka and run locally:
+  Download from https://kafka.apache.org/downloads
+
+  start zookeeper:
+  $<kafka-dir>/bin/zookeeper-server-start.sh config/zookeeper.properties
+
+  start kafka broker(s):
+  $<kafka-dir>/bin/kafka-server-start.sh config/server.properties
+
+  create kafka topics:
+  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
+  $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
+
+  List Topics:
+  $<kafka-dir>/bin/kafka-topics.sh  --list --zookeeper localhost:2181
+  Delete Topic
+  $<kafka-dir>/bin/kafka-topics.sh  --delete --topic stocks --zookeeper localhost:2181
+
+  $<kafka-dir>/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic stocks
+  $<kafka-dir>/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic stocks
+
+  describe:
+  $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks
+  $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
 
 
-  # H2 Next Steps:
+  ## Next Steps:
 
   1) Dockerize the whole workflow components and run it in Container managers like Kubernetes or AWS Elastic Kubernetics Service
   2)
