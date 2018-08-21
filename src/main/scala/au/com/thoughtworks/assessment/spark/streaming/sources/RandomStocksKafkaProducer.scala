@@ -27,22 +27,24 @@ object RandomStocksKafkaProducer {
     val topic = "stocks"
     val numRecsToProduce: Option[Int] = None //None = infinite
     var theBoolean = true
+    val stockNames = Map(0 -> "AGL", 1 -> "AMC", 2 -> "ANZ", 3 -> "BHP", 4 -> "BXB", 5 -> "CBA", 6 -> "CSL", 7 -> "IAG", 8 -> "MQG", 9 -> "NAB", 10 -> "ORG", 11 -> "RIO", 12 -> "SCG", 13 -> "S32", 14 -> "SUN", 15 -> "TLS", 16 -> "TCL", 17 -> "WES", 18 -> "WBC", 19 -> "WPL", 20 -> "WOW")
 
 
 
     @tailrec
     def produceRecord(numRecToProduce: Option[Int]): Unit = {
       def generateStockRecord(topic: String): ProducerRecord[String, String] = {
-        val stockName = s"stock${r.nextInt(10)}"
-        val quantity = r.nextInt(150)
-        val price = r.nextFloat * 100
+        val stockName = stockNames(r.nextInt(3))
+        val quantity = r.nextInt(1000)
+        val price = r.nextFloat() * 1000
+        val priceF = "%.2f".format(price)
         theBoolean = !theBoolean
         val tradeType = if (theBoolean) "SELL" else "BUY"
 
         val eventTime = System.currentTimeMillis()
         val eventTimeReadable = new Timestamp(eventTime.toLong)
 
-        val value = s"$stockName,$tradeType,$price,$quantity,$eventTime,$eventTimeReadable"
+        val value = s"$stockName,$tradeType,$priceF,$quantity,$eventTime,$eventTimeReadable"
         print(s"Writing $value\n")
         val d = r.nextFloat() * 100
         if (d < 2) {

@@ -40,7 +40,7 @@ object FileStreamingAggregations {
         StructField("timestamp", LongType) ::
         StructField("eventTimeReadable", StringType) :: Nil)
 
-    //read the source
+    //read the files from source
     val stocks: DataFrame = spark
       .readStream
       .schema(schema)

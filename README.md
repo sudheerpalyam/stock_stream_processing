@@ -6,30 +6,10 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 @author: Sudheer Palyam
 
 
-  * To setup kafka:
-  * Download from https://kafka.apache.org/downloads
-  *
-  * start zookeeper:
-  * bin/zookeeper-server-start.sh conig/zookeeper.properties
-  *
-  * start kafka broker(s):
-  * bin/kafka-server-start.sh config/server.properties
-  *
-  * create kafka topics:
-  * bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
-  * bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
-  *
-  * bin/kafka-console-producer.sh --topic stocks_averages --broker-list localhost:9092
-  * bin/kafka-console-console.sh --topic stocks_averages --bootstrap-server localhost:2181
-  *
-  * describe:
-  * bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks 
-  * bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
 
+# H1 Architectural Patterns:
 
-Architectural Patterns:
-
-Batch Mode - Spark Window Aggregations
+# H2 File Streaming Mode - Spark Window Aggregations
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
@@ -68,3 +48,33 @@ Spark 2.3/2.4.0-SNAPSHOT repository
     - [update](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L108)
   - [Multiple Stream Queries](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/KafkaSourceStreaming.scala#L111)
   - [Kafka Producer](src/main/scala/au/com/thoughtworks/assessment/spark/util/RandomStocksKafkaProducer.scala)
+
+
+
+
+
+  * Quick steps to setup kafka and run locally:
+  * Download from https://kafka.apache.org/downloads
+  *
+  * start zookeeper:
+  * $<kafka-dir>/bin/zookeeper-server-start.sh config/zookeeper.properties
+  *
+  * start kafka broker(s):
+  * $<kafka-dir>/bin/kafka-server-start.sh config/server.properties
+  *
+  * create kafka topics:
+  * $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
+  * $<kafka-dir>/bin/kafka-topics.sh --create --topic "stocks_averages" --replication-factor 1 --partitions 1 --zookeeper localhost:2181
+  *
+  * $<kafka-dir>/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic stocks
+  * $<kafka-dir>/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic stocks
+  *
+  * describe:
+  * $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks
+  * $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
+
+
+  # H2 Next Steps:
+
+  1) Dockerize the whole workflow components and run it in Container managers like Kubernetes or AWS Elastic Kubernetics Service
+  2)
