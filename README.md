@@ -66,11 +66,8 @@ From our sample output:
 ![Alt text](static/SparkKafkaStreaming.jpeg?raw=true "Stock Aggregations using kafka message and spark")
 
 
-
-
 #### 2. Serverless Approach - Cloud Native - Infinite Scalability and less management (proposed)
-![Alt text](static/KinesisStreamProcessing.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
-
+![Alt text](static/KinesisDataStream.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
 
 
 #### 3. File Streaming Mode - Spark Window Aggregations (Alternate approach)
