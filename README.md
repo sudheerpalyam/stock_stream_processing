@@ -58,23 +58,65 @@ From our sample output:
 
 
 ### Architectural Patterns:
+    Given problem can be implemented in the following architectures, Considering Cost optimization, Reliability, Operational Efficiency, Performance & Security (CROPS):
 
 
 
-#### Classic Approach - Kafka + Spark Window Aggregations (current implementation)
+#### 1. Classic Approach - Kafka + Spark Window Aggregations (current implementation)
 ![Alt text](static/SparkKafkaStreaming.jpeg?raw=true "Stock Aggregations using kafka message and spark")
 
 
 
 
-#### Serverless Approach - Cloud Native - Infinite Scalability and less management (proposed)
-![Alt text](static/KinesisStreamProcessing.jpeg.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
+#### 2. Serverless Approach - Cloud Native - Infinite Scalability and less management (proposed)
+![Alt text](static/KinesisStreamProcessing.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
 
 
 
-
-#### File Streaming Mode - Spark Window Aggregations (Alternate approach)
+#### 3. File Streaming Mode - Spark Window Aggregations (Alternate approach)
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
+
+
+
+#### Machine Learning :
+
+    The problem is a typical time series problem. In this you can see if there's seasonality in the time series.
+    In reality a time series problem one needs to decompose the time series to see whether its additive or multiplicative in nature.
+    Below is the scenario:
+
+    Below is one such example :
+    https://onlinecourses.science.psu.edu/stat510/node/70/
+
+    Usually in a time series we handle 3 scenarios:
+    Seasonality (S)
+    Trend (T)
+    Remainder component (R)
+    For example in a time series for a data point Y, if the above 3 components are additive in nature then its expressed as
+    Y = S + T+ R
+    if this is multiplicative in nature then it would be:
+    Y = S * T * R
+
+
+    We can use following example:
+    https://stackoverflow.com/questions/23402303/apache-spark-moving-average
+    http://xinhstechblog.blogspot.com/2016/04/spark-window-functions-for-dataframes.html
+    https://github.com/apache/spark/blob/v1.4.1/mllib/src/main/scala/org/apache/spark/mllib/rdd/SlidingRDD.scala
+
+
+    But for now, you can do this in the format:
+    =================================================================================================
+     - Aggregate the data if its from Daily to weekly / monthly levels.
+    =================================================================================================
+     - Perform What if analysis - What if the stock price is going up / down by "X" dollars (maybe 2-3 dollars)
+    =================================================================================================
+     - Check for Stationarity - See if there is any way we can do Dickey fuller test / KS Test in Spark Scala. I am not sure if this is available.
+     Usually this is the way we do in a time series data: http://rstudio-pubs-static.s3.amazonaws.com/22255_f08b6a7cfff9451abaace84773bb41e0.html
+    =================================================================================================
+     - You can try applying ARIMA Time series models
+    https://mapr.com/blog/using-apache-spark-sql-explore-sp-500-and-oil-stock-prices/
+    https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-forecast
+    https://www.slideshare.net/SparkSummit/time-series-analytics-with-spark-spark-summit-east-talk-by-simon-Ouellette
+    =================================================================================================
 
 
 #### Feature bookmarks:
@@ -114,8 +156,6 @@ From our sample output:
 
 
 
-
-
 #### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
   ```
@@ -140,6 +180,19 @@ From our sample output:
   describe:
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks
   $<kafka-dir>/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic stocks_averages
+
+  Spark Submit Script:
+  src/main/resources/submitSpark.sh
+
+  nohup spark-submit \
+   --deploy-mode client --master yarn \
+   --executor-cores 4 --executor-memory 6g --conf spark.yarn.executor.memoryOverhead=1G --conf spark.yarn.driver.memoryOverhead=1G  \
+   --jars $(echo /home/sudheerpalyam/jars/*.jar | tr ' ' ',') \
+   --class au.com.thoughtworks.assessment.spark.streaming.KafkaStructuredStreaming \
+   /home/sudheerpalyam/jars/stock_stream_processing_2.11-0.1.jar \
+   --isGlue false \
+   --mode  yarn >> ../logs/stock-spark-$runTime.log &
+
 ```
 
 #### Next Steps:
@@ -154,6 +207,8 @@ From our sample output:
   4) Dockerize all the workflow components and run it in Container managers like Kubernetes or AWS Elastic Kubernetes Service
   5) Enhance Unit Tests and perform Code Coverage and eventually DevOps
   6) SonarQube/Fortify code vulnerability assessment
+  7) Associate a Machine Learning use case which can be facilitated by moving averages.
+
 
 
 
