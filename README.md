@@ -60,7 +60,20 @@ From our sample output:
 ### Architectural Patterns:
 
 
-#### File Streaming Mode - Spark Window Aggregations (Proposed)
+
+#### Classic Approach - Kafka + Spark Window Aggregations (current implementation)
+![Alt text](static/SparkKafkaStreaming.jpeg?raw=true "Stock Aggregations using kafka message and spark")
+
+
+
+
+#### Serverless Approach - Cloud Native - Infinite Scalability and less management (proposed)
+![Alt text](static/KinesisStreamProcessing.jpeg.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
+
+
+
+
+#### File Streaming Mode - Spark Window Aggregations (Alternate approach)
 ![Alt text](static/SparkBatchPipeline.jpeg?raw=true "Stock Aggregations by loading files in Batch mode")
 
 
