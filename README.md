@@ -1,4 +1,4 @@
-#### Technical assessment
+### Technical assessment
 
 Currently focusing on performing Moving Averages on Streaming Market Stock data, but this framework is generally extendable for any Data Engineering, Machine Learning Engineering tasks.
 
@@ -8,7 +8,7 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 ### Problem Statement
     Design and implement a Scalable, Distributed, Complete solution accepting input data feed and perform ***moving averages*** which helps identifying trends in Stock Market.
 
-### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
+#### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
 
 ### Analysis of Structured Streaming Sliding Window based aggregates:
 
@@ -66,7 +66,7 @@ From our sample output:
 
 
 #### 2. Serverless Approach - Cloud Native - Infinite Scalability and less management (proposed)
-![Alt text](static/KinesisDataStream.jpeg?raw=true "Stock Aggregations using Kinesis stream and analytics")
+![Alt text](static/KinesisDataStream.jpg?raw=true "Stock Aggregations using Kinesis stream and analytics")
 
 
 #### 3. File Streaming Mode - Spark Window Aggregations (Alternate approach)
@@ -74,7 +74,7 @@ From our sample output:
 
 
 
-#### Machine Learning :
+### Machine Learning :
 
 The problem is a typical time series problem. In this you can see if there's seasonality in the time series.
 In reality a time series problem one needs to decompose the time series to see whether its additive or multiplicative in nature.
@@ -110,7 +110,7 @@ https://mapr.com/blog/using-apache-spark-sql-explore-sp-500-and-oil-stock-prices
 https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-forecast
 
 
-#### Feature bookmarks:
+### Feature bookmarks:
 
 - Spark Structured Streaming
   - [File Stream](src/main/scala/au/com/thoughtworks/assessment/spark/streaming/HelloStructredStreaming.scala#L23)
@@ -147,7 +147,7 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
 
 
 
-#### Quick steps to setup kafka and run locally:
+### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
   ```
   start zookeeper:
@@ -186,7 +186,7 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
 
 ```
 
-#### Next Steps:
+### Next Steps:
   1) Integrate a visualization layer based on Kibana & InfluxDB to continuously stream raw vs moving averages
   2) Run Kafka & Spark in Yarn/Mesos/DCOS Clustered Mode
   3) Implement the same pipeline using AWS native Serverless components replacing:
@@ -202,7 +202,7 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
 
 
 
-  #### References:
+  ### References:
   https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23
   https://github.com/pablo-tech/SparkService--Statistician
   https://aws.amazon.com/big-data/datalakes-and-analytics/
