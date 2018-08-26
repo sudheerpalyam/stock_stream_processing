@@ -1,5 +1,4 @@
-### 
-Proposed Data Engineering Framework for ThroughWorks, as part for a technical assessment.
+#### Technical assessment
 
 Currently focusing on performing Moving Averages on Streaming Market Stock data, but this framework is generally extendable for any Data Engineering, Machine Learning Engineering tasks.
 
@@ -9,7 +8,7 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 ### Problem Statement
     Design and implement a Scalable, Distributed, Complete solution accepting input data feed and perform ***moving averages*** which helps identifying trends in Stock Market.
 
-#### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
+### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
 
 ### Analysis of Structured Streaming Sliding Window based aggregates:
 
@@ -77,43 +76,42 @@ From our sample output:
 
 #### Machine Learning :
 
-    The problem is a typical time series problem. In this you can see if there's seasonality in the time series.
-    In reality a time series problem one needs to decompose the time series to see whether its additive or multiplicative in nature.
-    Below is the scenario:
+The problem is a typical time series problem. In this you can see if there's seasonality in the time series.
+In reality a time series problem one needs to decompose the time series to see whether its additive or multiplicative in nature.
+Below is the scenario:
 
-    Below is one such example :
-    https://onlinecourses.science.psu.edu/stat510/node/70/
+Below is one such example :
+https://onlinecourses.science.psu.edu/stat510/node/70/
 
-    Usually in a time series we handle 3 scenarios:
-    Seasonality (S)
-    Trend (T)
-    Remainder component (R)
-    For example in a time series for a data point Y, if the above 3 components are additive in nature then its expressed as
-    Y = S + T+ R
-    if this is multiplicative in nature then it would be:
-    Y = S * T * R
-
-
-    We can use following example:
-    https://stackoverflow.com/questions/23402303/apache-spark-moving-average
-    http://xinhstechblog.blogspot.com/2016/04/spark-window-functions-for-dataframes.html
-    https://github.com/apache/spark/blob/v1.4.1/mllib/src/main/scala/org/apache/spark/mllib/rdd/SlidingRDD.scala
+Usually in a time series we handle 3 scenarios:
+Seasonality (S)
+Trend (T)
+Remainder component (R)
+For example in a time series for a data point Y, if the above 3 components are additive in nature then its expressed as
+Y = S + T+ R
+if this is multiplicative in nature then it would be:
+Y = S * T * R
 
 
-    But for now, you can do this in the format:
-    =================================================================================================
-     - Aggregate the data if its from Daily to weekly / monthly levels.
-    =================================================================================================
-     - Perform What if analysis - What if the stock price is going up / down by "X" dollars (maybe 2-3 dollars)
-    =================================================================================================
-     - Check for Stationarity - See if there is any way we can do Dickey fuller test / KS Test in Spark Scala. I am not sure if this is available.
-     Usually this is the way we do in a time series data: http://rstudio-pubs-static.s3.amazonaws.com/22255_f08b6a7cfff9451abaace84773bb41e0.html
-    =================================================================================================
-     - You can try applying ARIMA Time series models
-    https://mapr.com/blog/using-apache-spark-sql-explore-sp-500-and-oil-stock-prices/
-    https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-forecast
-    https://www.slideshare.net/SparkSummit/time-series-analytics-with-spark-spark-summit-east-talk-by-simon-Ouellette
-    =================================================================================================
+We can use following example:
+https://stackoverflow.com/questions/23402303/apache-spark-moving-average
+http://xinhstechblog.blogspot.com/2016/04/spark-window-functions-for-dataframes.html
+https://github.com/apache/spark/blob/v1.4.1/mllib/src/main/scala/org/apache/spark/mllib/rdd/SlidingRDD.scala
+
+
+But for now, you can do this in the format:
+=================================================================================================
+ - Aggregate the data if its from Daily to weekly / monthly levels.
+=================================================================================================
+ - Perform What if analysis - What if the stock price is going up / down by "X" dollars (maybe 2-3 dollars)
+=================================================================================================
+ - Check for Stationarity - See if there is any way we can do Dickey fuller test / KS Test in Spark Scala. I am not sure if this is available.
+ Usually this is the way we do in a time series data: http://rstudio-pubs-static.s3.amazonaws.com/22255_f08b6a7cfff9451abaace84773bb41e0.html
+=================================================================================================
+ - You can try applying ARIMA Time series models
+https://mapr.com/blog/using-apache-spark-sql-explore-sp-500-and-oil-stock-prices/
+https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-forecast
+=================================================================================================
 
 
 #### Feature bookmarks:
@@ -208,8 +206,6 @@ From our sample output:
 
 
 
-
-
   #### References:
   https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23
   https://github.com/pablo-tech/SparkService--Statistician
@@ -220,3 +216,5 @@ From our sample output:
   https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/StreamingCounts.scala - Spark Streaming write to DynamoDB
   https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/kinesis/KinesisUtils.scala - Kinesis Utils
   https://github.com/snowplow/spark-streaming-example-project/blob/master/src/main/scala/com.snowplowanalytics.spark/streaming/storage/DynamoUtils.scala - Dynamo Utils
+  https://www.slideshare.net/SparkSummit/time-series-analytics-with-spark-spark-summit-east-talk-by-simon-Ouellette
+
