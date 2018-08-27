@@ -104,9 +104,9 @@ But for now, you can do this in the format:
 
  - Aggregate the data if its from Daily to weekly / monthly levels.
  - Perform What if analysis - What if the stock price is going up / down by "X" dollars (maybe 2-3 dollars)
- - Check for Stationarity - See if there is any way we can do Dickey fuller test / KS Test in Spark Scala. I am not sure if this is available.
+ - Check for Stationarity - See if there is any way we can do Dickey fuller test / KS Test in Spark Scala.
  Usually this is the way we do in a time series data: http://rstudio-pubs-static.s3.amazonaws.com/22255_f08b6a7cfff9451abaace84773bb41e0.html
- - You can try applying ARIMA Time series models
+ - We can also try applying ARIMA Time series models
 https://mapr.com/blog/using-apache-spark-sql-explore-sp-500-and-oil-stock-prices/
 https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-forecast
 
@@ -200,6 +200,9 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
   5) Enhance Unit Tests and perform Code Coverage and eventually DevOps
   6) SonarQube/Fortify code vulnerability assessment
   7) Associate a Machine Learning use case which can be facilitated by moving averages.
+  8) Integrate with actual public Stock streams APIs like and perform RealTime rolling averages :
+    https://globalrealtime.xignite.com/v3/xGlobalRealTime.json/ListExchanges?
+    https://kite.trade/docs/connect/v1/
 
 
 
