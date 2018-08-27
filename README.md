@@ -10,16 +10,16 @@ Currently focusing on performing Moving Averages on Streaming Market Stock data,
 
 #### Technologies chosen:  Apache Spark 2.3, Scala 2.11, SBT 1.0, Kafka 2.0.0, Zookeeper
 
-### Analysis of Structured Streaming Sliding Window based aggregates:
+### Analysis of Structured Streaming Sliding Window based Rolling Average Aggregates:
 
 ![Alt text](static/OutputAnalysis.png?raw=true "Streaming output")
 
 
-As we see the output above, Kafka is fed with one message per second.
-Spark streaming is set to **3 seconds windows**, **sliding every second**.
+As we can see in the output above, Kafka is fed with one message per second (just to demonstrate a slow stream).
+Spark streaming is set to **3 seconds window**, **sliding every second**.
 So there will be three messages in each window.
 Since we are grouping by StockName, in this case AGL. There were two AGL stocks in one sliding window and its aggregates like max, min and avg are computed.
-So we can observe how Spark Structured Streaming retains messages from previous windows.
+So we can observe how Spark Structured Streaming retains messages from previous windows progressing every second.
 Watermarking is used to limit the state maintenance, as more state to maintain mean more resources utilised.
 
 ```
@@ -37,6 +37,7 @@ From our sample output:
 ### Data:
     [Synthetic Stock Events generated: ](data/sample_input.txt)
     [Final Moving Averages Output: ](data/sample_output.txt)
+    Please refer to above for more rolling averages.
 
 
 ### Scalability considerations:
@@ -203,6 +204,7 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
 
 
   ### References:
+  http://springbrain.blogspot.com/2017/12/spark-scala-perform-data-aggregation-on.html (My blog)
   https://github.com/soniclavier/bigdata-notebook/blob/master/spark_23
   https://github.com/pablo-tech/SparkService--Statistician
   https://aws.amazon.com/big-data/datalakes-and-analytics/
