@@ -44,7 +44,7 @@ object FileStreamingAggregations {
     val stocks: DataFrame = spark
       .readStream
       .schema(schema)
-      .csv("/tmp/spark_file_stream/stocks/")
+      .csv("/Users/sudheer/workspace/stock_stream_processing/src/test/resources/testdata/")
 
     //do aggregates
     val aggregates = stocks
