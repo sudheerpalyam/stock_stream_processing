@@ -148,7 +148,10 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
 
 
 ####   Unit Tests
-![Alt text](http://htmlpreview.github.com/?https://raw.githubusercontent.com/sudheerpalyam/stock_stream_processing/master/target/test-reports/index.html?raw=true "Stock Aggregations Unit Tests results page")
+Stock Aggregations Unit Tests results page
+https://rawgit.com/sudheerpalyam/stock_stream_processing/master/target/test-reports/index.html
+
+![Unit Test Results](static/ScalaTestResults.png?raw=true "Unit Test Results")
 
 ### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
