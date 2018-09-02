@@ -147,8 +147,8 @@ https://stackoverflow.com/questions/28248916/how-to-do-time-series-simple-foreca
   - [Kafka Producer](src/main/scala/au/com/thoughtworks/assessment/spark/util/RandomStocksKafkaProducer.scala)
 
 
-####   4. Unit Tests
-![Alt text](target/test-reports/index.html?raw=true "Stock Aggregations Unit Tests results page")
+####   Unit Tests
+![Alt text](http://htmlpreview.github.com/?https://raw.githubusercontent.com/sudheerpalyam/stock_stream_processing/master/target/test-reports/index.html?raw=true "Stock Aggregations Unit Tests results page")
 
 ### Quick steps to setup kafka and run locally:
   Download from https://kafka.apache.org/downloads
