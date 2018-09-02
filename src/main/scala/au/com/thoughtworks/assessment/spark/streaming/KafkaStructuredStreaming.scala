@@ -16,7 +16,6 @@ import org.apache.spark.sql.functions._
   */
 object KafkaStructuredStreaming {
 
-
   //convert aggregates into typed data
   case class StockEvent(stockName: String, tradeType: String, price: Option[Double], quantity: Option[Int], timestamp: Timestamp, eventTimeReadable: String)
   object StockEvent {
@@ -54,21 +53,11 @@ object KafkaStructuredStreaming {
       .selectExpr("CAST(value AS STRING)")
       .map(r ⇒ StockEvent(r.getString(0)))
 
-    //aggregation without window
-    /* val aggregates = stocks.groupBy("stockName").avg("price") */
-
     //windowing
-    val aggregates = stocks
-      .withWatermark("timestamp", "5 seconds") // Ignore data if they are late by more than 5 seconds
-      .groupBy(window($"timestamp","3 seconds","1 seconds"), $"stockName")  //sliding window of size 4 seconds, that slides every 1 second
-      // .groupBy(window($"timestamp","6 seconds"), $"stockName") //tumbling window of size 4 seconds (event time)
-      // .groupBy(window(current_timestamp(),"4 seconds"), $"stockName") // if we want to use processing time, instead of event_time
-      .agg(avg("price").alias("price"), min("price").alias("minPrice"), max("price").alias("maxPrice"), count("price").alias("count"))
-      .select("window.start", "window.end", "stockName", "price", "minPrice", "maxPrice", "count")
+    val aggregates = performSlidingWindow (stocks)
 
     // Get the resultant Dataframe Schema
    aggregates.printSchema()
-
 
     // Print the window processing output in Console. Tricky to see when run in Yarn Cluster Mode
     val writeToConsole = aggregates
@@ -96,5 +85,23 @@ object KafkaStructuredStreaming {
       .start()
 
     spark.streams.awaitAnyTermination() //running multiple streams at a time
+  }
+
+  def performSlidingWindow (df: Dataset[StockEvent]) : DataFrame  = {
+      df
+      .withWatermark("timestamp", "5 seconds") // Ignore data if they are late by more than 5 seconds
+      .groupBy(window(col("timestamp"),"3 seconds","1 seconds"), col("stockName"))  //sliding window of size 4 seconds, that slides every 1 second
+      // .groupBy(window($"timestamp","6 seconds"), $"stockName") //tumbling window of size 4 seconds (event time)
+      // .groupBy(window(current_timestamp(),"4 seconds"), $"stockName") // if we want to use processing time, instead of event_time
+      .agg(avg("price").alias("price"), min("price").alias("minPrice"), max("price").alias("maxPrice"), count("price").alias("count"))
+      .select("window.start", "window.end", "stockName", "price", "minPrice", "maxPrice", "count")
+  }
+
+  def performSlidingWindowFrame (df: DataFrame) : DataFrame  = {
+    df
+      .withWatermark("timestamp", "5 seconds") // Ignore data if they are late by more than 5 seconds
+      .groupBy(window(col("timestamp"),"10 seconds","5 seconds"), col("stockName"))  //sliding window of size 10 seconds, that slides every 5 second
+      .agg(avg("price").alias("avgPrice"), min("price").alias("minPrice"), max("price").alias("maxPrice"), count("price").alias("count"))
+      .select("window.start", "window.end", "stockName", "avgPrice", "minPrice", "maxPrice", "count")
   }
 }
